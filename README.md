@@ -2,11 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Skill
+## Built with
 React / Typescript
 
 ## Design
 Material UI 
+
+## Detabase
+Firebase
 
 
 ## Available Scripts
