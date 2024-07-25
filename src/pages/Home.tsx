@@ -16,15 +16,24 @@ const Home = ({ monthlyTransactions }: HomeProps) => {
       <Box
         sx={{
           flexGlow: 1,
+          width: "80%",
           // bgcolor: "#fff",
           // boxShadow: 3,
-          // padding: 2,
+          padding: 2,
           // borderRadius: "10px",
         }}>
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
         <Calendar />
       </Box>
-      <Box>
+      <Box
+        sx={{
+          flexGlow: 1,
+          width: "20%",
+          // bgcolor: "#fff",
+          // boxShadow: 3,
+          // padding: 2,
+          // borderRadius: "10px",
+        }}>
         <TransactionMenu />
         <TransactionForm />
       </Box>
