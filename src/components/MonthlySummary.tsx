@@ -3,8 +3,16 @@ import React from "react";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SavingsIcon from "@mui/icons-material/Savings";
+import { Transaction } from "../types";
+import { financeCalculations } from "../utils/financeCalculations";
 
-const MonthlySummary = () => {
+interface MonthlySummaryProps {
+  monthlyTransactions: Transaction[];
+}
+
+const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
+  const { income, expense, balance } = financeCalculations(monthlyTransactions);
+  console.log(balance);
   return (
     <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
       {/* 収入 */}
@@ -15,8 +23,7 @@ const MonthlySummary = () => {
             color: "#fff",
             borderRadius: "10px",
             flexGlow: 1,
-          }}
-        >
+          }}>
           <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
             <Stack direction={"row"}>
               <ArrowUpwardIcon sx={{ fontSize: "2rem" }} />
@@ -26,9 +33,8 @@ const MonthlySummary = () => {
               textAlign={"right"}
               variant="h5"
               fontWeight={"bold"}
-              sx={{ wordBreak: "break-word" }}
-            >
-              300円
+              sx={{ wordBreak: "break-word" }}>
+              {income}
             </Typography>
           </CardContent>
         </Card>
@@ -42,8 +48,7 @@ const MonthlySummary = () => {
             color: "#fff",
             borderRadius: "10px",
             flexGlow: 1,
-          }}
-        >
+          }}>
           <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
             <Stack direction={"row"}>
               <ArrowDownwardIcon sx={{ fontSize: "2rem" }} />
@@ -53,9 +58,8 @@ const MonthlySummary = () => {
               textAlign={"right"}
               variant="h5"
               fontWeight={"bold"}
-              sx={{ wordBreak: "break-word" }}
-            >
-              300円
+              sx={{ wordBreak: "break-word" }}>
+              {expense}
             </Typography>
           </CardContent>
         </Card>
@@ -69,20 +73,14 @@ const MonthlySummary = () => {
             color: "#fff",
             borderRadius: "10px",
             flexGlow: 1,
-          }}
-        >
+          }}>
           <CardContent sx={{ padding: { xs: 1, sm: 2 } }}>
             <Stack direction={"row"}>
               <SavingsIcon sx={{ fontSize: "2rem" }} />
               <Typography>残高</Typography>
             </Stack>
-            <Typography
-              textAlign={"right"}
-              variant="h5"
-              fontWeight={"bold"}
-              sx={{ wordBreak: "break-word" }}
-            >
-              300円
+            <Typography textAlign={"right"} variant="h5" fontWeight={"bold"}>
+              {balance}
             </Typography>
           </CardContent>
         </Card>

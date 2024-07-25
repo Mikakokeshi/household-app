@@ -11,6 +11,8 @@ import { CssBaseline } from "@mui/material";
 import { Transaction } from "./types/index";
 import { db } from "./firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { format } from "date-fns";
+import { formatMonth } from "./utils/formatting";
 
 function App() {
   function isFireStoreError(
@@ -19,6 +21,10 @@ function App() {
     return typeof err === "object";
   }
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  // console.log(format(currentMonth, "yyyy-MM"));
+  // console.log(currentMonth);
+  // console.log(new Date());
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,13 +53,21 @@ function App() {
     fetchData();
   }, []);
 
+  const monthlyTransactions = transactions.filter((transaction) => {
+    return transaction.date.startsWith(formatMonth(currentMonth));
+  });
+  // console.log(monthlyTransactions);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Routes>
           <Route path="/" element={<AppLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={<Home monthlyTransactions={monthlyTransactions} />}
+            />
             <Route path="/report" element={<Report />} />
             <Route path="*" element={<Nomatch />} />
           </Route>
