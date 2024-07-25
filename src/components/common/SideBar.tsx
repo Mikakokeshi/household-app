@@ -67,13 +67,13 @@ const SideBar = ({
         {MenuItems.map((item, index) => (
           <NavLink
             to={item.path}
+            key={index}
             style={({ isActive }) => {
               return {
                 ...baseLinkStyle,
                 ...(isActive ? activeLinkStyle : {}),
               };
-            }}
-          >
+            }}>
             <ListItem key={index} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -94,8 +94,7 @@ const SideBar = ({
     <Box
       component="nav"
       sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
-      aria-label="mailbox folders"
-    >
+      aria-label="mailbox folders">
       {/* モバイル用 */}
       <Drawer
         variant="temporary"
@@ -107,8 +106,7 @@ const SideBar = ({
         sx={{
           display: { xs: "block", sm: "none" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
-        }}
-      >
+        }}>
         {drawer}
       </Drawer>
 
@@ -119,8 +117,7 @@ const SideBar = ({
           display: { xs: "none", md: "block" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
-        open
-      >
+        open>
         {drawer}
       </Drawer>
     </Box>
