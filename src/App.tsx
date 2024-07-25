@@ -13,6 +13,11 @@ import { db } from "./firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 function App() {
+  function isFireStoreError(
+    err: unknown
+  ): err is { code: string; message: string } {
+    return typeof err === "object";
+  }
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +34,15 @@ function App() {
         });
         setTransactions(transactionsData);
         console.log(transactions);
-      } catch (err) {}
+      } catch (err) {
+        if (isFireStoreError(err)) {
+          console.error(err);
+          console.error(err.message);
+          console.error(err.code);
+        } else {
+          console.error("firestore以外のエラー", err);
+        }
+      }
     };
     fetchData();
   }, []);
