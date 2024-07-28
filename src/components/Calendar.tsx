@@ -7,6 +7,7 @@ import "../calendar.css";
 import { caluculateDailyBalances } from "../utils/financeCalculations";
 import { Balance, CanlendarContent, Transaction } from "../types";
 import { formatCurrency } from "../utils/formatting";
+import interactionPlugin from "@fullcalendar/interaction";
 
 interface CalendarProps {
   monthlyTransactions: Transaction[];
@@ -67,7 +68,7 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
   };
   return (
     <FullCalendar
-      plugins={[dayGridPlugin]}
+      plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
       locale={jaLocale}
       events={createEvents}
