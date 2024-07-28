@@ -2,7 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import React from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
-import { EventContentArg } from "@fullcalendar/core";
+import { DatesSetArg, EventContentArg } from "@fullcalendar/core";
 import "../calendar.css";
 import { caluculateDailyBalances } from "../utils/financeCalculations";
 import { Balance, CanlendarContent, Transaction } from "../types";
@@ -10,8 +10,9 @@ import { formatCurrency } from "../utils/formatting";
 
 interface CalendarProps {
   monthlyTransactions: Transaction[];
+  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
 }
-const Calendar = ({ monthlyTransactions }: CalendarProps) => {
+const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
   const events = [
     { title: "Meeting", start: new Date() },
     {
@@ -59,6 +60,11 @@ const Calendar = ({ monthlyTransactions }: CalendarProps) => {
 
   const createEvents = createCalendarEvents(dailyBalances);
   console.log(createEvents);
+
+  const handleDateSet = (datasetInfo: DatesSetArg) => {
+    console.log(datasetInfo);
+    setCurrentMonth(datasetInfo.view.currentStart);
+  };
   return (
     <FullCalendar
       plugins={[dayGridPlugin]}
@@ -66,6 +72,7 @@ const Calendar = ({ monthlyTransactions }: CalendarProps) => {
       locale={jaLocale}
       events={createEvents}
       eventContent={renderEventContent}
+      datesSet={handleDateSet}
     />
   );
 };
