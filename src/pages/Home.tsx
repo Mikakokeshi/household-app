@@ -23,7 +23,7 @@ const Home = ({ monthlyTransactions }: HomeProps) => {
           // borderRadius: "10px",
         }}>
         <MonthlySummary monthlyTransactions={monthlyTransactions} />
-        <Calendar />
+        <Calendar monthlyTransactions={monthlyTransactions} />
       </Box>
       <Box
         sx={{

@@ -22,3 +22,9 @@ export interface Balance {
   expense: number;
   balance: number;
 }
+export interface CanlendarContent {
+  start: string;
+  income: string;
+  expense: string;
+  balance: string;
+}

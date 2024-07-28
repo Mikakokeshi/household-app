@@ -4,7 +4,14 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import { EventContentArg } from "@fullcalendar/core";
 import "../calendar.css";
-const Calendar = () => {
+import { caluculateDailyBalances } from "../utils/financeCalculations";
+import { Balance, CanlendarContent, Transaction } from "../types";
+import { formatCurrency } from "../utils/formatting";
+
+interface CalendarProps {
+  monthlyTransactions: Transaction[];
+}
+const Calendar = ({ monthlyTransactions }: CalendarProps) => {
   const events = [
     { title: "Meeting", start: new Date() },
     {
@@ -32,12 +39,32 @@ const Calendar = () => {
       </div>
     );
   };
+
+  const dailyBalances = caluculateDailyBalances(monthlyTransactions);
+  console.log(dailyBalances);
+
+  const createCalendarEvents = (
+    dailyBalances: Record<string, Balance>
+  ): CanlendarContent[] => {
+    return Object.keys(dailyBalances).map((date) => {
+      const { income, expense, balance } = dailyBalances[date];
+      return {
+        start: date,
+        income: formatCurrency(income),
+        expense: formatCurrency(expense),
+        balance: formatCurrency(balance),
+      };
+    });
+  };
+
+  const createEvents = createCalendarEvents(dailyBalances);
+  console.log(createEvents);
   return (
     <FullCalendar
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"
       locale={jaLocale}
-      events={events}
+      events={createEvents}
       eventContent={renderEventContent}
     />
   );
