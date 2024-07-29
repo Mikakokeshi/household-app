@@ -7,13 +7,18 @@ import "../calendar.css";
 import { caluculateDailyBalances } from "../utils/financeCalculations";
 import { Balance, CanlendarContent, Transaction } from "../types";
 import { formatCurrency } from "../utils/formatting";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
 interface CalendarProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
 }
-const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
+const Calendar = ({
+  monthlyTransactions,
+  setCurrentMonth,
+  setCurrentDay,
+}: CalendarProps) => {
   const events = [
     { title: "Meeting", start: new Date() },
     {
@@ -26,7 +31,6 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
   ];
 
   const renderEventContent = (eventInfo: EventContentArg) => {
-    console.log(eventInfo);
     return (
       <div>
         <div className="money" id="event-income">
@@ -43,7 +47,6 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
   };
 
   const dailyBalances = caluculateDailyBalances(monthlyTransactions);
-  console.log(dailyBalances);
 
   const createCalendarEvents = (
     dailyBalances: Record<string, Balance>
@@ -60,11 +63,13 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
   };
 
   const createEvents = createCalendarEvents(dailyBalances);
-  console.log(createEvents);
 
   const handleDateSet = (datasetInfo: DatesSetArg) => {
-    console.log(datasetInfo);
     setCurrentMonth(datasetInfo.view.currentStart);
+  };
+
+  const handleDateClick = (dateInfo: DateClickArg) => {
+    setCurrentDay(dateInfo.dateStr);
   };
   return (
     <FullCalendar
@@ -74,6 +79,7 @@ const Calendar = ({ monthlyTransactions, setCurrentMonth }: CalendarProps) => {
       events={createEvents}
       eventContent={renderEventContent}
       datesSet={handleDateSet}
+      dateClick={handleDateClick}
     />
   );
 };

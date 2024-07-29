@@ -3,7 +3,6 @@ import { Balance, Transaction } from "../types";
 export function financeCalculations(transactions: Transaction[]): Balance {
   return transactions.reduce(
     (accumulate, transaction) => {
-      console.log(transaction, accumulate.expense);
       if (transaction.type === "income") {
         accumulate.income += transaction.amount;
       } else {
