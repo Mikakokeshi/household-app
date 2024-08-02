@@ -46,8 +46,7 @@ export default function AppLayout() {
         flexGrow: 1,
         bgcolor: (theme) => theme.palette.grey[100],
         minHeight: "100vh",
-      }}
-    >
+      }}>
       <CssBaseline />
 
       {/* ヘッダー */}
@@ -56,16 +55,14 @@ export default function AppLayout() {
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
-        }}
-      >
+        }}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
-          >
+            sx={{ mr: 2, display: { md: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
@@ -88,8 +85,7 @@ export default function AppLayout() {
           flexGrow: 1,
           p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
+        }}>
         <Toolbar />
         <Outlet />
       </Box>

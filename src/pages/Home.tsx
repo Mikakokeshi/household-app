@@ -27,7 +27,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
       <Box
         sx={{
           flexGlow: 1,
-          width: "80%",
+          width: "76%",
           // bgcolor: "#fff",
           // boxShadow: 3,
           padding: 2,
