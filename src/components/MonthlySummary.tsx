@@ -14,7 +14,7 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
   const { income, expense, balance } = financeCalculations(monthlyTransactions);
   console.log(balance);
   return (
-    <Grid container spacing={{ xs: 1, sm: 2 }} mb={2}>
+    <Grid container spacing={{ xs: 1, sm: 2 }} mb={2} display={"flex"}>
       {/* 収入 */}
       <Grid item xs={4} display={"flex"} flexDirection={"column"}>
         <Card
