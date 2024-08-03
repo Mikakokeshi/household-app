@@ -62,10 +62,16 @@ const Calendar = ({
     });
   };
 
-  const createEvents = createCalendarEvents(dailyBalances);
+  const calendarEvents = createCalendarEvents(dailyBalances);
 
   const handleDateSet = (datasetInfo: DatesSetArg) => {
-    setCurrentMonth(datasetInfo.view.currentStart);
+    const currentMonth = datasetInfo.view.currentStart;
+    const todaysDate = new Date();
+    setCurrentMonth(currentMonth);
+    //選択月が今月の場合のみ、自動で今日の日付にリセット
+    if (isSameMonth(todaysDate, currentMonth)) {
+      setCurrentDay(today);
+    }
   };
 
   const handleDateClick = (dateInfo: DateClickArg) => {
