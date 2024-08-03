@@ -38,16 +38,14 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
           monthlyTransactions={monthlyTransactions}
           setCurrentMonth={setCurrentMonth}
           setCurrentDay={setCurrentDay}
+          currentDay={currentDay}
+          today={today}
         />
       </Box>
       <Box
         sx={{
           flexGlow: 1,
           width: "20%",
-          // bgcolor: "#fff",
-          // boxShadow: 3,
-          // padding: 2,
-          // borderRadius: "10px",
         }}>
         <TransactionMenu
           dailyTransactions={dailyTransactions}
