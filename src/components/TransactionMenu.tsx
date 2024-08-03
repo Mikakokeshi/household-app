@@ -24,13 +24,15 @@ import IconComponents from "./common/IconComponents";
 interface TransactionMenuProps {
   dailyTransactions: Transaction[];
   currentDay: string;
+  handleAddTransactionForm: () => void;
 }
 
 const TransactionMenu = ({
   dailyTransactions,
   currentDay,
+  handleAddTransactionForm,
 }: TransactionMenuProps) => {
-  const menuDrawerWidth = "21%";
+  const menuDrawerWidth = "320px";
   return (
     <Drawer
       sx={{
@@ -64,7 +66,10 @@ const TransactionMenu = ({
             <Typography variant="body1">内訳</Typography>
           </Box>
           {/* 右側の追加ボタン */}
-          <Button startIcon={<AddCircleIcon />} color="primary">
+          <Button
+            startIcon={<AddCircleIcon />}
+            color="primary"
+            onClick={handleAddTransactionForm}>
             内訳を追加
           </Button>
         </Box>
