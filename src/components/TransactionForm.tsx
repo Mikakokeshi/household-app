@@ -9,23 +9,55 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close"; // 閉じるボタン用のアイコン
-import FastfoodIcon from "@mui/icons-material/Fastfood"; //食事アイコン
 import { Controller, useForm } from "react-hook-form";
 import { watch } from "fs";
+import { ExpenseCategory, IncomeCategory } from "../types";
+import AlarmIcon from "@mui/icons-material/Alarm";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import AddHomeIcon from "@mui/icons-material/AddHome";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+import SportsTennisIcon from "@mui/icons-material/SportsTennis";
+import TrainIcon from "@mui/icons-material/Train";
+import WorkIcon from "@mui/icons-material/Work";
+import SavingsIcon from "@mui/icons-material/Savings";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 
 interface TransactionFormProps {
   onCloseForm: () => void; //関数に戻り値はないためvoid
   isEntryDrawerOpen: boolean;
   currentDay: string;
 }
+
+interface CategoryItem {
+  label: IncomeCategory | ExpenseCategory;
+  icon: JSX.Element;
+}
+
 const TransactionForm = ({
   onCloseForm,
   isEntryDrawerOpen,
   currentDay,
 }: TransactionFormProps) => {
   const formWidth = 320;
+
+  const expenseCategories: CategoryItem[] = [
+    { label: "食費", icon: <FastfoodIcon fontSize="small" /> },
+    { label: "日用品", icon: <AlarmIcon fontSize="small" /> },
+    { label: "住居費", icon: <AddHomeIcon fontSize="small" /> },
+    { label: "交際費", icon: <Diversity3Icon fontSize="small" /> },
+    { label: "娯楽", icon: <SportsTennisIcon fontSize="small" /> },
+    { label: "交通費", icon: <TrainIcon fontSize="small" /> },
+  ];
+  const incomeCategories: CategoryItem[] = [
+    { label: "給与", icon: <WorkIcon fontSize="small" /> },
+    { label: "副収入", icon: <SavingsIcon fontSize="small" /> },
+    { label: "おこずかい", icon: <AddBusinessIcon fontSize="small" /> },
+  ];
+
+  const [categories, setCategories] = useState(expenseCategories);
+
   const { control, setValue, watch } = useForm({
     defaultValues: {
       type: "expense",
@@ -47,6 +79,13 @@ const TransactionForm = ({
   useEffect(() => {
     setValue("date", currentDay);
   }, [currentDay]);
+
+  useEffect(() => {
+    const newCategories =
+      currentType === "expense" ? expenseCategories : incomeCategories;
+    console.log(newCategories);
+    setCategories(newCategories);
+  }, [currentType]);
 
   return (
     <Box
@@ -130,23 +169,35 @@ const TransactionForm = ({
           <Controller
             name="category"
             control={control}
-            render={({ field }) => (
-              <TextField {...field} id="カテゴリ" label="カテゴリ" select>
-                <MenuItem value={"食費"}>
-                  <ListItemIcon>
-                    <FastfoodIcon />
-                  </ListItemIcon>
-                  食費
-                </MenuItem>
-              </TextField>
-            )}
+            render={({ field }) => {
+              console.log(field);
+              return (
+                <TextField {...field} id="カテゴリ" label="カテゴリ" select>
+                  {categories.map((category) => (
+                    <MenuItem value={category.label}>
+                      <ListItemIcon>{category.icon}</ListItemIcon>
+                      {category.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              );
+            }}
           />
           {/* 金額 */}
           <Controller
             name="amount"
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="金額" type="number" />
+              <TextField
+                {...field}
+                value={field.value === 0 ? "" : field.value}
+                onChange={(e) => {
+                  const newValue = parseInt(e.target.value) || 0;
+                  field.onChange(newValue);
+                }}
+                label="金額"
+                type="number"
+              />
             )}
           />
 
