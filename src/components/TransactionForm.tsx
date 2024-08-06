@@ -23,6 +23,8 @@ import TrainIcon from "@mui/icons-material/Train";
 import WorkIcon from "@mui/icons-material/Work";
 import SavingsIcon from "@mui/icons-material/Savings";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void; //関数に戻り値はないためvoid
@@ -58,7 +60,13 @@ const TransactionForm = ({
 
   const [categories, setCategories] = useState(expenseCategories);
 
-  const { control, setValue, watch } = useForm({
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -66,6 +74,7 @@ const TransactionForm = ({
       category: "",
       content: "",
     },
+    resolver: zodResolver(transactionSchema),
   });
 
   type IncomeExpense = "income" | "expense";
@@ -86,6 +95,10 @@ const TransactionForm = ({
     console.log(newCategories);
     setCategories(newCategories);
   }, [currentType]);
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
 
   return (
     <Box
@@ -119,7 +132,7 @@ const TransactionForm = ({
         </IconButton>
       </Box>
       {/* フォーム要素 */}
-      <Box component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {/* 収支切り替えボタン */}
           <Controller
@@ -161,6 +174,8 @@ const TransactionForm = ({
                 InputLabelProps={{
                   shrink: true,
                 }}
+                error={!!errors.date}
+                helperText={errors.date?.message}
               />
             )}
           />
@@ -172,9 +187,15 @@ const TransactionForm = ({
             render={({ field }) => {
               console.log(field);
               return (
-                <TextField {...field} id="カテゴリ" label="カテゴリ" select>
-                  {categories.map((category) => (
-                    <MenuItem value={category.label}>
+                <TextField
+                  {...field}
+                  id="カテゴリ"
+                  label="カテゴリ"
+                  select
+                  error={!!errors.category}
+                  helperText={errors.category?.message}>
+                  {categories.map((category, index) => (
+                    <MenuItem value={category.label} key={index}>
                       <ListItemIcon>{category.icon}</ListItemIcon>
                       {category.label}
                     </MenuItem>
@@ -197,6 +218,8 @@ const TransactionForm = ({
                 }}
                 label="金額"
                 type="number"
+                error={!!errors.amount}
+                helperText={errors.amount?.message}
               />
             )}
           />
@@ -206,7 +229,13 @@ const TransactionForm = ({
             name="content"
             control={control}
             render={({ field }) => (
-              <TextField {...field} label="内容" type="text" />
+              <TextField
+                {...field}
+                label="内容"
+                type="text"
+                error={!!errors.content}
+                helperText={errors.content?.message}
+              />
             )}
           />
           {/* 保存ボタン */}
