@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close"; // 閉じるボタン用のアイコン
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { watch } from "fs";
 import { ExpenseCategory, IncomeCategory } from "../types";
 import AlarmIcon from "@mui/icons-material/Alarm";
@@ -24,12 +24,13 @@ import WorkIcon from "@mui/icons-material/Work";
 import SavingsIcon from "@mui/icons-material/Savings";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { transactionSchema } from "../validations/schema";
+import { Schema, transactionSchema } from "../validations/schema";
 
 interface TransactionFormProps {
   onCloseForm: () => void; //関数に戻り値はないためvoid
   isEntryDrawerOpen: boolean;
   currentDay: string;
+  handleSaveTransaction: (transaction: Schema) => Promise<void>;
 }
 
 interface CategoryItem {
@@ -41,6 +42,7 @@ const TransactionForm = ({
   onCloseForm,
   isEntryDrawerOpen,
   currentDay,
+  handleSaveTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -66,7 +68,7 @@ const TransactionForm = ({
     watch,
     formState: { errors },
     handleSubmit,
-  } = useForm({
+  } = useForm<Schema>({
     defaultValues: {
       type: "expense",
       date: currentDay,
@@ -96,8 +98,9 @@ const TransactionForm = ({
     setCategories(newCategories);
   }, [currentType]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<Schema> = (data) => {
     console.log(data);
+    handleSaveTransaction(data);
   };
 
   return (
@@ -139,7 +142,7 @@ const TransactionForm = ({
             name="type"
             control={control}
             render={({ field }) => {
-              console.log(field);
+              // console.log(field);
               return (
                 <ButtonGroup fullWidth>
                   <Button
@@ -185,7 +188,7 @@ const TransactionForm = ({
             name="category"
             control={control}
             render={({ field }) => {
-              console.log(field);
+              // console.log(field);
               return (
                 <TextField
                   {...field}

@@ -6,13 +6,19 @@ import TransactionMenu from "../components/TransactionMenu";
 import TransactionForm from "../components/TransactionForm";
 import { Transaction } from "../types";
 import { formatDate } from "date-fns";
+import { Schema } from "../validations/schema";
 
 interface HomeProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+  handleSaveTransaction: (transaction: Schema) => Promise<void>;
 }
 
-const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
+const Home = ({
+  monthlyTransactions,
+  setCurrentMonth,
+  handleSaveTransaction,
+}: HomeProps) => {
   const today = formatDate(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
@@ -62,6 +68,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth }: HomeProps) => {
           onCloseForm={onCloseForm}
           isEntryDrawerOpen={isEntryDrawerOpen}
           currentDay={currentDay}
+          handleSaveTransaction={handleSaveTransaction}
         />
       </Box>
     </Box>
