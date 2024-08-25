@@ -25,14 +25,17 @@ interface TransactionMenuProps {
   dailyTransactions: Transaction[];
   currentDay: string;
   handleAddTransactionForm: () => void;
+  handleSelectTransaction: (transaction: Transaction) => void;
 }
 
 const TransactionMenu = ({
   dailyTransactions,
   currentDay,
   handleAddTransactionForm,
+  handleSelectTransaction,
 }: TransactionMenuProps) => {
   const menuDrawerWidth = "320px";
+
   return (
     <Drawer
       sx={{
@@ -77,8 +80,9 @@ const TransactionMenu = ({
           <List aria-label="取引履歴">
             <Stack spacing={2}>
               {dailyTransactions.map((transaction) => (
-                <ListItem disablePadding>
+                <ListItem disablePadding key={transaction.id}>
                   <Card
+                    onClick={() => handleSelectTransaction(transaction)}
                     sx={{
                       width: "100%",
                       backgroundColor:

@@ -23,6 +23,8 @@ function App() {
   }
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null); //初期値はnull
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ function App() {
         const transactionsData = querySnapshot.docs.map((doc) => {
           // doc.data() is never undefined for query doc snapshots
           // console.log(doc.id, " => ", doc.data());
-          console.log(doc.data());
+          // console.log(doc.data());
           return {
             ...doc.data(),
             id: doc.id,
@@ -92,6 +94,8 @@ function App() {
                   monthlyTransactions={monthlyTransactions}
                   setCurrentMonth={setCurrentMonth}
                   handleSaveTransaction={handleSaveTransaction}
+                  selectedTransaction={selectedTransaction}
+                  setSelectedTransaction={setSelectedTransaction}
                 />
               }
             />

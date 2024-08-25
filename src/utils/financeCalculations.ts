@@ -23,7 +23,7 @@ export function caluculateDailyBalances(
 ): Record<string, Balance> {
   return transactions.reduce<Record<string, Balance>>((acc, transaction) => {
     const day = transaction.date;
-    console.log(transaction);
+    // console.log(transaction);
     if (!acc[day]) {
       acc[day] = { income: 0, expense: 0, balance: 0 };
     }
