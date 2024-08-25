@@ -12,23 +12,20 @@ interface HomeProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
   handleSaveTransaction: (transaction: Schema) => Promise<void>;
-  selectedTransaction: Transaction | null;
-  setSelectedTransaction: React.Dispatch<
-    React.SetStateAction<Transaction | null>
-  >;
+  onDeleteTransaction: (transactionId: string) => Promise<void>;
 }
 
 const Home = ({
   monthlyTransactions,
   setCurrentMonth,
   handleSaveTransaction,
-  selectedTransaction,
-  setSelectedTransaction,
+  onDeleteTransaction,
 }: HomeProps) => {
   const today = formatDate(new Date(), "yyyy-MM-dd");
   const [currentDay, setCurrentDay] = useState(today);
   const [isEntryDrawerOpen, setIsEntryDrawerOpen] = useState(false);
-
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null); //初期値はnull
   const dailyTransactions = monthlyTransactions.filter((transaction) => {
     console.log(currentDay);
     return transaction.date === currentDay;
@@ -36,10 +33,15 @@ const Home = ({
 
   const onCloseForm = () => {
     setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    setSelectedTransaction(null);
   };
 
   const handleAddTransactionForm = () => {
-    setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    if (selectedTransaction) {
+      setSelectedTransaction(null);
+    } else {
+      setIsEntryDrawerOpen(!isEntryDrawerOpen);
+    }
   };
 
   //取引選択時の処理
@@ -84,6 +86,8 @@ const Home = ({
           currentDay={currentDay}
           handleSaveTransaction={handleSaveTransaction}
           selectedTransaction={selectedTransaction}
+          onDeleteTransaction={onDeleteTransaction}
+          setSelectedTransaction={setSelectedTransaction}
         />
       </Box>
     </Box>

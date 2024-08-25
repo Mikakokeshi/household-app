@@ -32,6 +32,10 @@ interface TransactionFormProps {
   currentDay: string;
   handleSaveTransaction: (transaction: Schema) => Promise<void>;
   selectedTransaction: Transaction | null;
+  onDeleteTransaction: (transactionId: string) => Promise<void>;
+  setSelectedTransaction: React.Dispatch<
+    React.SetStateAction<Transaction | null>
+  >;
 }
 
 interface CategoryItem {
@@ -45,6 +49,8 @@ const TransactionForm = ({
   currentDay,
   handleSaveTransaction,
   selectedTransaction,
+  onDeleteTransaction,
+  setSelectedTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -122,8 +128,23 @@ const TransactionForm = ({
       setValue("amount", selectedTransaction.amount);
       setValue("category", selectedTransaction.category);
       setValue("content", selectedTransaction.content);
+    } else {
+      reset({
+        type: "expense",
+        date: currentDay,
+        amount: 0,
+        category: "",
+        content: "",
+      });
     }
   }, [selectedTransaction]);
+
+  const handleDelete = () => {
+    if (selectedTransaction) {
+      onDeleteTransaction(selectedTransaction.id);
+      setSelectedTransaction(null);
+    }
+  };
 
   return (
     <Box
@@ -263,7 +284,6 @@ const TransactionForm = ({
               />
             )}
           />
-          {/* 保存ボタン */}
           <Button
             type="submit"
             variant="contained"
@@ -271,6 +291,16 @@ const TransactionForm = ({
             fullWidth>
             保存
           </Button>
+
+          {selectedTransaction && (
+            <Button
+              onClick={handleDelete}
+              variant="outlined"
+              color={"secondary"}
+              fullWidth>
+              削除
+            </Button>
+          )}
         </Stack>
       </Box>
     </Box>
