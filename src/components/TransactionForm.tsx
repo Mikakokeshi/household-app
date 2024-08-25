@@ -36,6 +36,10 @@ interface TransactionFormProps {
   setSelectedTransaction: React.Dispatch<
     React.SetStateAction<Transaction | null>
   >;
+  onUpdateTransaction: (
+    transaction: Schema,
+    transactionId: string
+  ) => Promise<void>;
 }
 
 interface CategoryItem {
@@ -51,6 +55,7 @@ const TransactionForm = ({
   selectedTransaction,
   onDeleteTransaction,
   setSelectedTransaction,
+  onUpdateTransaction,
 }: TransactionFormProps) => {
   const formWidth = 320;
 
@@ -110,7 +115,24 @@ const TransactionForm = ({
 
   const onSubmit: SubmitHandler<Schema> = (data) => {
     console.log(data);
-    handleSaveTransaction(data);
+    if (selectedTransaction) {
+      onUpdateTransaction(data, selectedTransaction.id)
+        .then(() => {
+          setSelectedTransaction(null);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      handleSaveTransaction(data)
+        .then(() => {
+          console.log(" 保存");
+          setSelectedTransaction(null);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
 
     reset({
       type: "expense",
@@ -289,7 +311,7 @@ const TransactionForm = ({
             variant="contained"
             color={currentType === "income" ? "primary" : "error"}
             fullWidth>
-            保存
+            {selectedTransaction ? "更新" : "保存"}
           </Button>
 
           {selectedTransaction && (
